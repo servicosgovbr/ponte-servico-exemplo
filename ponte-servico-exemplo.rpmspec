@@ -1,0 +1,95 @@
+# desliga recompressão (quebra JARs)
+# - http://stackoverflow.com/questions/9292243/rpmbuild-change-compression-format
+# - https://groups.google.com/forum/#!topic/linux.redhat.rpm/TKz6JZHK0ck
+%define __os_install_post %{nil}
+%define _binary_payload w9.gzdio
+
+%define _user ponte-servicos
+
+Name:               ponte-servico-exemplo
+Version:            %{version}
+Release:            1
+Summary:            Ponte para o Portal de Servicos
+Group:              Applications
+License:            MIT
+Vendor:             ThoughtWorks, Inc
+URL:                http://github.com/servicosgovbr/ponte-servico-exemplo
+BuildRoot:          %{builddir}
+Prefix:             /opt/%{name}
+BuildArchitectures: noarch
+
+Source0:            %{_sourcedir}/%{name}-%{version}.jar
+Source1:            %{_sourcedir}/default.config
+
+%description
+Ponte de integracao com o Portal de Servicos do Governo Federal do Brasil
+
+%prep
+
+%build
+
+%install
+# JAR principal
+mkdir -p %{buildroot}/%{prefix}/lib
+cp %{SOURCE0} %{buildroot}/%{prefix}/lib/%{name}.jar
+
+# Configurações e variáveis de ambiente
+mkdir -p %{buildroot}/etc/sysconfig
+cp %{SOURCE1} %{buildroot}/etc/sysconfig/%{name}
+
+cat <<-EOF > %{buildroot}/etc/sysconfig/%{name}-overrides
+# Este arquivo sobrescreve variáveis de configuração do Portal de Serviços.
+# Para mais informações, veja a documentação em:
+#
+# http://servicosgovbr.github.io/ponte-servico-exemplo/
+EOF
+
+mkdir -p %{buildroot}/etc/systemd/system
+cat <<-EOF > %{buildroot}/etc/systemd/system/%{name}.service
+[Unit]
+Description=%{summary}
+
+[Service]
+ExecStart=/opt/%{name}/bin/%{name}
+User=%{_user}
+TimeoutSec=300
+EnvironmentFile=/etc/sysconfig/%{name}
+EnvironmentFile=/etc/sysconfig/%{name}-overrides
+SyslogIdentifier=ponte-servico-exemplo
+SyslogLevelPrefix=false
+StandardOutput=syslog
+StandardError=syslog
+WorkingDirectory=/var/lib/%{name}
+OOMScoreAdjust=-1000
+
+[Install]
+WantedBy=multi-user.target
+EOF
+
+mkdir -p %{buildroot}/var/lib/%{name}
+
+# Script para iniciar o processo
+mkdir -p %{buildroot}/%{prefix}/bin
+cat <<-EOF > %{buildroot}/%{prefix}/bin/%{name}
+#!/bin/bash
+java \${JAVA_OPTS} -jar %{prefix}/lib/%{name}.jar
+EOF
+
+%files
+%attr(0755, %{_user}, %{_user}) %{prefix}/bin/%{name}
+%attr(0644, %{_user}, %{_user}) %{prefix}/lib/%{name}.jar
+%attr(0644, %{_user}, %{_user}) /etc/systemd/system/%{name}.service
+%dir %attr(0755, %{_user}, %{_user}) /var/lib/%{name}
+
+%config %attr(0644, %{_user}, %{_user}) /etc/sysconfig/%{name}
+%config(noreplace) %attr(0644, %{_user}, %{_user}) /etc/sysconfig/%{name}-overrides
+
+%clean
+rm -rf %{buildroot}
+
+%pre
+getent group %{_user} >/dev/null || groupadd -r %{_user}
+getent passwd %{_user} >/dev/null || \
+    useradd -r -g %{_user} -d /var/lib/%{name} -s /sbin/nologin \
+    -c "Usuario para a ponte com o Portal de Servicos" %{_user}
+exit 0

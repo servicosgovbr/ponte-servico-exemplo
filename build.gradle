@@ -1,0 +1,37 @@
+apply plugin: 'java'
+apply plugin: 'spring-boot'
+apply plugin: 'idea'
+apply plugin: 'project-report'
+apply plugin: 'jacoco'
+apply plugin: 'pmd'
+apply plugin: 'findbugs'
+apply plugin: "sonar-runner"
+
+if (System.getenv("SNAP_CI").equals("true") && System.getenv("SNAP_PIPELINE_COUNTER") != null) {
+    version = "1.0.${System.getenv("SNAP_PIPELINE_COUNTER")}"
+} else {
+    version = '1.0.0'
+}
+
+sourceCompatibility = 1.8
+targetCompatibility = 1.8
+
+buildscript {
+    repositories {
+        mavenLocal()
+        mavenCentral()
+        maven { url "http://repo.spring.io/snapshot" }
+        maven { url "http://repo.spring.io/milestone" }
+    }
+    dependencies {
+        classpath 'org.springframework.boot:spring-boot-gradle-plugin:1.2.4.BUILD-SNAPSHOT'
+        classpath 'org.kt3k.gradle.plugin:coveralls-gradle-plugin:2.3.1'
+    }
+}
+
+apply from: "${rootProject.rootDir}/gradle/dependencies.gradle"
+apply from: "${rootProject.rootDir}/gradle/info-properties.gradle"
+apply from: "${rootProject.rootDir}/gradle/git-properties.gradle"
+apply from: "${rootProject.rootDir}/gradle/rpm.gradle"
+apply from: "${rootProject.rootDir}/gradle/idea.gradle"
+apply from: "${rootProject.rootDir}/gradle/tests.gradle"

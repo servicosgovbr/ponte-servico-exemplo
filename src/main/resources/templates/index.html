@@ -1,13 +1,26 @@
 <!doctype html>
-<html>
-  <head>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
     <title>Exemplo</title>
-  </head>
-  <body>
+</head>
+<body>
 
-  <p>
-    Hello, <span th:text="${name ?: 'World'}"></span>!
-  </p>
+<th:block th:if="${name == null or name.isEmpty()}">
+    <p>
+        What is your name?
+    </p>
 
-  </body>
+    <form action="/" method="GET">
+        <input type="text" name="name"/>
+        <button>Greet</button>
+    </form>
+</th:block>
+
+<th:block th:if="${name != null and !name.isEmpty()}">
+    <p>
+        Hello, <span th:text="${name}"></span>!
+    </p>
+</th:block>
+
+</body>
 </html>

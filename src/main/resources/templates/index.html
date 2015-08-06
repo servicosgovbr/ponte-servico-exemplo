@@ -5,22 +5,36 @@
 </head>
 <body>
 
-<th:block th:if="${name == null or name.isEmpty()}">
-    <p>
-        What is your name?
-    </p>
+<h1>Exemplo de integração com o Portal de Serviços</h1>
 
-    <form action="/" method="GET">
-        <input type="text" name="name"/>
-        <button>Greet</button>
-    </form>
-</th:block>
+<p>
+    Este conteúdo está fora do <code>div#servico</code> e não será apresentado na página do serviço.
+</p>
 
-<th:block th:if="${name != null and !name.isEmpty()}">
-    <p>
-        Hello, <span th:text="${name}"></span>!
-    </p>
-</th:block>
+<div id="servico">
+
+    <th:block th:if="${name == null or name.isEmpty()}">
+        <p>
+            Qual seu nome?
+        </p>
+
+        <form action="/" method="GET">
+            <input type="text" name="name"/>
+            <button>OK</button>
+        </form>
+    </th:block>
+
+    <th:block th:if="${name != null and !name.isEmpty()}">
+        <p>
+            Olá, <span th:text="${name}"></span>!
+        </p>
+    </th:block>
+
+</div>
+
+<p>
+    Este conteúdo também está fora do <code>div#servico</code> e não será apresentado na página do serviço.
+</p>
 
 </body>
 </html>

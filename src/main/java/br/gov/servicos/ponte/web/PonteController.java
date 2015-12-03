@@ -16,6 +16,7 @@ import java.util.Optional;
 import java.util.UUID;
 
 import static java.lang.String.format;
+import static org.springframework.web.bind.annotation.RequestMethod.POST;
 
 @Controller
 @Slf4j
@@ -27,7 +28,7 @@ public class PonteController {
     };
     private Map<String, Sessao> sessoes = new HashMap<>();
 
-    @RequestMapping(value = "/ponte", consumes = MediaType.APPLICATION_JSON_VALUE, produces = MediaType.APPLICATION_JSON_VALUE)
+    @RequestMapping(value = "/ponte", consumes = MediaType.APPLICATION_JSON_VALUE, produces = MediaType.APPLICATION_JSON_VALUE, method = POST)
     @ResponseBody
     RespostaPonte ponte(@RequestBody RequestPonte request) {
         log.info("Request ponte: " + request);
@@ -36,13 +37,7 @@ public class PonteController {
         String action = request.action;
         log.debug("Sessão: " + sessao);
 
-        if (action == null || action.isEmpty()) {
-            app.index();
-        } else {
-            app.action(action, request.params);
-        }
-
-        return null;
+        return app.action(request.action, request.params);
     }
 
     private Sessao obterOuCriarInstancia(String appId, String sessao) {

@@ -20,4 +20,5 @@ public class EmissaoDARFService {
 
     public void darfParaDebito(long rip, long debito) {
     }
+
 }

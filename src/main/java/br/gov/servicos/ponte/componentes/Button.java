@@ -9,11 +9,12 @@ import lombok.experimental.Wither;
 @Wither
 @AllArgsConstructor
 @NoArgsConstructor
-public class Label implements Componente {
-    String value;
+public class Button implements Componente {
+    String text;
+    String action;
 
     @Override
     public String getType() {
-        return "label";
+        return "submit";
     }
 }

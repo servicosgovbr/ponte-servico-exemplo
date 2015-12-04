@@ -5,17 +5,16 @@ import lombok.Data;
 import lombok.NoArgsConstructor;
 import lombok.experimental.Wither;
 
-import java.util.ArrayList;
-import java.util.List;
-
 @Data
 @Wither
 @AllArgsConstructor
-public class Tabela implements Componente {
-    List<ChaveValor> items = new ArrayList<>();
+@NoArgsConstructor
+public class ChaveValor implements Componente {
+    String left;
+    String right;
 
     @Override
     public String getType() {
-        return "tabela";
+        return "chave-valor";
     }
 }

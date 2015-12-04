@@ -1,10 +1,7 @@
 package br.gov.spu.darf;
 
 import br.gov.servicos.ponte.PonteApp;
-import br.gov.servicos.ponte.componentes.Button;
-import br.gov.servicos.ponte.componentes.Componente;
-import br.gov.servicos.ponte.componentes.Input;
-import br.gov.servicos.ponte.componentes.Label;
+import br.gov.servicos.ponte.componentes.*;
 import br.gov.servicos.ponte.web.RespostaPonte;
 import lombok.extern.slf4j.Slf4j;
 
@@ -68,19 +65,20 @@ public class EmissaoDARFController implements PonteApp {
                 Arrays.asList(new Label("Extrato RIP: " + rip.getRip())).stream(),
                 rip.getDebitos().stream()
                         .map(d -> Arrays.asList(
-                             new Label("numero"), new Label(d.numero + ""),
-                             new Label("receita"), new Label(d.receita),
-                             new Label("exercicio"), new Label(d.exercicio + ""),
-                             new Label("cotasConc"), new Label(d.cotasConc + ""),
-                             new Label("cotasPagas"), new Label(d.cotasPagas + ""),
-                             new Label("cpf_cnpj"), new Label(d.cpf_cnpj),
-                             new Label("nomeResponsavel"), new Label(d.nomeResponsavel),
-                             new Label("opcaoPagamento"), new Label(d.opcaoPagamento),
-                             new Label("vencimento"), new Label(d.vencimento + ""),
-                             new Label("validade"), new Label(d.validade + ""),
-                             new Label("valorPrincipal"), new Label(d.valorPrincipal + ""),
-                             new Label("valorMulta"), new Label(d.valorMulta + ""),
-                             new Label("valorJuros"), new Label(d.valorJuros + "")))
+                                new ChaveValor("Número do débito", d.numero + ""),
+                                new ChaveValor("Receita", d.receita),
+                                new ChaveValor("Exercício", d.exercicio + ""),
+                                new ChaveValor("Cotas Conc.", d.cotasConc + ""),
+                                new ChaveValor("Cotas Pagas", d.cotasPagas + ""),
+                                new ChaveValor("CPF/CNPJ Responsável", d.cpf_cnpj),
+                                new ChaveValor("Nome do Responsável", d.nomeResponsavel),
+                                new ChaveValor("Opção de pagamento", d.opcaoPagamento),
+                                new ChaveValor("Vencimento", d.vencimento + ""),
+                                new ChaveValor("Data de Validade", d.validade + ""),
+                                new ChaveValor("Valor principal", d.valorPrincipal + ""),
+                                new ChaveValor("Valor da multa", d.valorMulta + ""),
+                                new ChaveValor("Valor dos Juros", d.valorJuros + ""),
+                                new ChaveValor("Valor Total", d.getValorTotal() + "")))
                         .flatMap(x -> x.stream()))
                 .collect(toList());
     }
@@ -90,8 +88,6 @@ public class EmissaoDARFController implements PonteApp {
 //    }
 
     private RespostaPonte resposta() {
-        return new RespostaPonte()
-                .withTitulo("DARF Patrimonial");
+        return new RespostaPonte();
     }
-
 }

@@ -15,6 +15,6 @@ public class Button implements Componente {
 
     @Override
     public String getType() {
-        return "submit";
+        return "button";
     }
 }

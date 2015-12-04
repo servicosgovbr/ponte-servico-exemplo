@@ -11,6 +11,7 @@ import java.util.Optional;
 public class RIPRepository {
 
     private static List<RIP> RIPS = Arrays.asList(new RIP()
+            .withRip(123123)
             .debito(new Debito()
                     .withNumero(123123)
                     .withReceita("Taxa de ocupação")

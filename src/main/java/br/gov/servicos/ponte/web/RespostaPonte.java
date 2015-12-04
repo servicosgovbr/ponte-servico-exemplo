@@ -12,11 +12,11 @@ import java.util.List;
 @Wither
 @AllArgsConstructor
 public class RespostaPonte {
-    String titulo;
+    String appId;
     List<Componente> componentes;
 
     public RespostaPonte() {
-        titulo = "";
+        appId = "";
         componentes = new ArrayList<>();
     }
 

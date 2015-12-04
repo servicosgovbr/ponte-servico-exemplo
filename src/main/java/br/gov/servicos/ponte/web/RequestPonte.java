@@ -13,7 +13,6 @@ import java.util.Map;
 @AllArgsConstructor
 public class RequestPonte {
     String appId;
-    String session;
     String action;
     Map<String, String> params;
 }

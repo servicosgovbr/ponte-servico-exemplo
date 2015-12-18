@@ -39,7 +39,7 @@ public class EmissaoDARFController implements PonteApp {
     private RespostaPonte index() {
         return resposta()
                 .componente(new Input()
-                        .withLabel("Número de Registro Imobiliário Patrimonial (RIP):")
+                        .withLabel("Registro Imobiliário Patrimonial (RIP):")
                         .withName("rip")
                         .withValue(""))
                 .componente(new Button()

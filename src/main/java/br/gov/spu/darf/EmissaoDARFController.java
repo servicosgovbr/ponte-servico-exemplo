@@ -49,6 +49,7 @@ public class EmissaoDARFController implements PonteApp {
 
     private RespostaPonte consultaRip(Map<String, String> params) {
         long rip = Long.parseLong(params.get("rip"));
+
         Optional<RIP> consulta = service.consultaRIP(rip);
 
         if (consulta.isPresent()) {
@@ -57,7 +58,7 @@ public class EmissaoDARFController implements PonteApp {
         }
         return resposta()
                 .componente(new Label()
-                        .withValue("Não Achou!"));
+                        .withValue("Não foram encontrados resultados para esta pesquisa"));
     }
 
     private List<Componente> renderizaRip(RIP rip) {

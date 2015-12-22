@@ -48,17 +48,23 @@ public class EmissaoDARFController implements PonteApp {
     }
 
     private RespostaPonte consultaRip(Map<String, String> params) {
-        long rip = Long.parseLong(params.get("rip"));
+        try {
+            long rip = Long.parseLong(params.get("rip"));
+            Optional<RIP> consulta = service.consultaRIP(rip);    
 
-        Optional<RIP> consulta = service.consultaRIP(rip);
+            if (consulta.isPresent()) {
+                return resposta().withComponentes(renderizaRip(consulta.get()));
+            }
 
-        if (consulta.isPresent()) {
             return resposta()
-                    .withComponentes(renderizaRip(consulta.get()));
+                    .componente(new Label()
+                            .withValue("Não foram encontrados resultados para esta pesquisa"));
+        } catch (Exception e) {
+            return resposta()
+                    .componente(new Label()
+                            .withValue("Não foram encontrados resultados para esta pesquisa"));
         }
-        return resposta()
-                .componente(new Label()
-                        .withValue("Não foram encontrados resultados para esta pesquisa"));
+
     }
 
     private List<Componente> renderizaRip(RIP rip) {

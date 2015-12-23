@@ -29,8 +29,6 @@ public class EmissaoDARFController implements PonteApp {
             switch (action) {
                 case "consulta-rip":
                     return consultaRip(params);
-//                    case "emitir-darf":
-//                        return emitirDarf(params);
             }
         }
         return index();
@@ -89,10 +87,6 @@ public class EmissaoDARFController implements PonteApp {
                         .flatMap(x -> x.stream()))
                 .collect(toList());
     }
-
-//    private RespostaPonte emitirDarf(Map<String, String> params) {
-//        return null;
-//    }
 
     private RespostaPonte resposta() {
         return new RespostaPonte();

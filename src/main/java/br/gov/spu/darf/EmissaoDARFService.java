@@ -17,8 +17,4 @@ public class EmissaoDARFService {
     public Optional<RIP> consultaRIP(long rip) {
         return rips.findOne(rip);
     }
-
-    public void darfParaDebito(long rip, long debito) {
-    }
-
 }
